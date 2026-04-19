@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Webpage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --bg: #080808; --surface: #111; --border: #1e1e1e; --text: #e8e8e8; --muted: #555; --accent: #a8ff78; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.6; overflow-x: hidden; }
+    nav { position: fixed; top: 0; width: 100%; background: rgba(8,8,8,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 999; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 60px; }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); letter-spacing: -0.5px; }
+    nav ul { display: flex; gap: 32px; list-style: none; }
+    nav a { color: var(--muted); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.05em; transition: color 0.2s; }
+    nav a:hover { color: var(--accent); }
+    header { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 80px 10% 60px; position: relative; overflow: hidden; }
+    header::before { content: ''; position: absolute; top: -200px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(168,255,120,0.06) 0%, transparent 70%); pointer-events: none; }
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; line-height: 1.05; letter-spacing: -2px; max-width: 800px; }
+    h1 span { color: var(--accent); }
+    .hero-sub { margin-top: 24px; color: var(--muted); font-size: 1.1rem; font-weight: 300; max-width: 480px; }
+    .hero-btns { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
+    .btn-primary { background: var(--accent); color: #000; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 12px 28px; border-radius: 6px; text-decoration: none; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(168,255,120,0.25); }
+    .btn-outline { color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 12px 28px; border-radius: 6px; text-decoration: none; border: 1px solid var(--border); transition: border-color 0.2s, color 0.2s; }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    section { padding: 100px 10%; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; }
+    h2 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 48px; }
+    .divider { border: none; border-top: 1px solid var(--border); }
+    #about .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .about-text p { color: var(--muted); font-weight: 300; font-size: 1.05rem; line-height: 1.8; margin-bottom: 16px; }
+    .about-img { aspect-ratio: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+    #skills { background: var(--surface); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+    .skill-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 24px 20px; text-align: center; transition: border-color 0.25s, transform 0.25s; }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .skill-icon { font-size: 2rem; margin-bottom: 10px; }
+    .skill-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--text); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: border-color 0.25s, transform 0.25s; cursor: default; }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .project-emoji { font-size: 2.4rem; margin-bottom: 16px; }
+    .project-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; margin-bottom: 10px; }
+    .project-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .ptag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--accent); border: 1px solid rgba(168,255,120,0.25); padding: 3px 10px; border-radius: 12px; }
+    #contact { text-align: center; }
+    #contact h2 { margin-bottom: 16px; }
+    #contact p { color: var(--muted); margin-bottom: 40px; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .contact-form { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    input, textarea { background: var(--surface); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; padding: 14px 18px; border-radius: 8px; outline: none; transition: border-color 0.2s; width: 100%; }
+    input:focus, textarea:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 120px; }
+    footer { border-top: 1px solid var(--border); padding: 32px 10%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    footer p { color: var(--muted); font-size: 0.85rem; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+    @media (max-width: 768px) { #about .grid { grid-template-columns: 1fr; } .about-img { display: none; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">JAGESH</div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header id="home">
+    <h1>Building the<br/><span>Web,</span><br/>One Tag at a Time.</h1>
+    <p class="hero-sub">A simple yet complete webpage demonstrating semantic HTML structure, navigation, sections, and forms.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </header>
+
+  <hr class="divider"/>
+
+  <section id="about">
+    <p class="section-label">// 01. about</p>
+    <h2>Who Am I?</h2>
+    <div class="grid">
+      <div class="about-text">
+        <p>I'm a full-stack web developer passionate about crafting fast, accessible, and beautiful digital experiences. I believe every pixel matters and every line of code tells a story.</p>
+        <p>Currently exploring the intersections of design and engineering — building things that are both functional and delightful to use.</p>
+        <a href="#contact" class="btn-primary">Let's Talk</a>
+      </div>
+      <div class="about-img">🧑‍💻</div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section id="skills">
+    <p class="section-label">// 02. skills</p>
+    <h2>Tech Stack</h2>
+    <div class="skills-grid">
+      <div class="skill-card"><div class="skill-icon">🌐</div><div class="skill-name">HTML5</div></div>
+      <div class="skill-card"><div class="skill-icon">🎨</div><div class="skill-name">CSS3</div></div>
+      <div class="skill-card"><div class="skill-icon">⚙️</div><div class="skill-name">JavaScript</div></div>
+      <div class="skill-card"><div class="skill-icon">⚛️</div><div class="skill-name">React</div></div>
+      <div class="skill-card"><div class="skill-icon">🍃</div><div class="skill-name">MongoDB</div></div>
+      <div class="skill-card"><div class="skill-icon">🐙</div><div class="skill-name">Git</div></div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section id="projects">
+    <p class="section-label">// 03. projects</p>
+    <h2>Featured Work</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-emoji">🌦️</div>
+        <div class="project-title">Weather App</div>
+        <div class="project-desc">Real-time weather data pulled from OpenWeatherMap API with dynamic backgrounds.</div>
+        <div class="project-tags">
+          <span class="ptag">HTML</span><span class="ptag">CSS</span><span class="ptag">API</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-emoji">💬</div>
+        <div class="project-title">Chat Module</div>
+        <div class="project-desc">Real-time messaging UI with message bubbles, timestamps, and smooth animations.</div>
+        <div class="project-tags">
+          <span class="ptag">HTML</span><span class="ptag">CSS</span><span class="ptag">JS</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-emoji">🛒</div>
+        <div class="project-title">E-Commerce Store</div>
+        <div class="project-desc">Full shopping experience with auth, cart management, and Stripe payment integration.</div>
+        <div class="project-tags">
+          <span class="ptag">React</span><span class="ptag">MongoDB</span><span class="ptag">Node</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider"/>
+
+  <section id="contact">
+    <p class="section-label">// 04. contact</p>
+    <h2>Say Hello 👋</h2>
+    <p>Have a project in mind or just want to connect? Drop a message below.</p>
+    <div class="contact-form">
+      <input type="text" placeholder="Your Name" />
+      <input type="email" placeholder="Email Address" />
+      <textarea placeholder="Your Message..."></textarea>
+      <button class="btn-primary" onclick="alert('Message sent! (Demo)')">Send Message →</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Jagesh</p>
+    <div class="footer-links">
+      <a href="#">GitHub</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Twitter</a>
+    </div>
+  </footer>
+
+</body>
+</html>
